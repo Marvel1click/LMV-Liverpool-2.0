@@ -199,7 +199,7 @@ export default function Home() {
           </div>
 
           {/* Menu content */}
-          <div className="flex flex-col items-center justify-center h-screen w-full space-y-6 text-center px-6 overflow-hidden">
+          <div className="flex flex-col items-center justify-center h-screen w-full space-y-6 text-center px-6 overflow-hidden bg-black">
             <Link href="/" onClick={closeMobileMenu} className="text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer text-xl font-semibold py-2">
               Home
             </Link>
