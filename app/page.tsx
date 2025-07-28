@@ -142,14 +142,29 @@ export default function Home() {
             </div>
 
             <button onClick={toggleMobileMenu} className="md:hidden text-white relative z-50">
-              <i className={`${isMobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-2xl transition-all duration-300`}></i>
+              <i className="ri-menu-line text-2xl transition-all duration-300"></i>
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         <div className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-md transition-all duration-300 z-50 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <div className="flex flex-col items-center justify-center h-full space-y-8 text-center">
+          {/* Close button */}
+          <div className="absolute top-6 right-4 z-60">
+            <button onClick={closeMobileMenu} className="text-white hover:text-yellow-400 transition-colors p-2">
+              <i className="ri-close-line text-3xl"></i>
+            </button>
+          </div>
+          
+          {/* Logo at top */}
+          <div className="absolute top-6 left-4 z-60">
+            <Link href="/" onClick={closeMobileMenu} className="flex items-center space-x-2">
+              <Image src={Logo} className="h-8" alt="LMV Logo" height={60} width={60} />
+            </Link>
+          </div>
+
+          {/* Menu content */}
+          <div className="flex flex-col items-center justify-center h-full space-y-8 text-center px-4 pt-20 pb-8">
             <Link href="/" onClick={closeMobileMenu} className="text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer text-2xl font-semibold">
               Home
             </Link>
@@ -165,7 +180,7 @@ export default function Home() {
             <Link href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-2xl font-semibold">
               Contact
             </Link>
-            <button onClick={handleBookingClick} className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold text-lg hover:from-yellow-500 hover:to-yellow-700 transition-all transform hover:scale-105 whitespace-nowrap cursor-pointer">
+            <button onClick={() => { handleBookingClick(); closeMobileMenu(); }} className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold text-lg hover:from-yellow-500 hover:to-yellow-700 transition-all transform hover:scale-105 whitespace-nowrap cursor-pointer mt-4">
               Book Now
             </button>
           </div>
