@@ -33,12 +33,47 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
+  // Cleanup effect for mobile menu
+  useEffect(() => {
+    return () => {
+      // Ensure body scroll is restored when component unmounts
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  // Handle escape key to close mobile menu
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMobileMenuOpen) {
+        closeMobileMenu();
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isMobileMenuOpen]);
+
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    const newState = !isMobileMenuOpen;
+    setIsMobileMenuOpen(newState);
+    
+    // Prevent body scroll when menu is open
+    if (newState) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
   };
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+    // Re-enable body scroll
+    document.body.style.overflow = 'unset';
   };
 
   const galleryImages = [
@@ -148,39 +183,39 @@ export default function Home() {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-md transition-all duration-300 z-50 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+        <div className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-md transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 visible z-[9999]' : 'opacity-0 invisible z-[-1]'}`} style={{ top: 0, left: 0, right: 0, bottom: 0, position: 'fixed' }}>
           {/* Close button */}
-          <div className="absolute top-6 right-4 z-60">
-            <button onClick={closeMobileMenu} className="text-white hover:text-yellow-400 transition-colors p-2">
-              <i className="ri-close-line text-3xl"></i>
+          <div className="absolute top-4 right-4 z-[10000]">
+            <button onClick={closeMobileMenu} className="text-white hover:text-yellow-400 transition-colors p-3 bg-gray-800/50 rounded-full backdrop-blur-sm">
+              <i className="ri-close-line text-2xl"></i>
             </button>
           </div>
           
           {/* Logo at top */}
-          <div className="absolute top-6 left-4 z-60">
-            <Link href="/" onClick={closeMobileMenu} className="flex items-center space-x-2">
+          <div className="absolute top-4 left-4 z-[10000]">
+            <Link href="/" onClick={closeMobileMenu} className="flex items-center space-x-2 bg-gray-800/50 rounded-full p-2 backdrop-blur-sm">
               <Image src={Logo} className="h-8" alt="LMV Logo" height={60} width={60} />
             </Link>
           </div>
 
           {/* Menu content */}
-          <div className="flex flex-col items-center justify-center h-full space-y-8 text-center px-4 pt-20 pb-8">
-            <Link href="/" onClick={closeMobileMenu} className="text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer text-2xl font-semibold">
+          <div className="flex flex-col items-center justify-center h-screen w-full space-y-6 text-center px-6 overflow-hidden">
+            <Link href="/" onClick={closeMobileMenu} className="text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer text-xl font-semibold py-2">
               Home
             </Link>
-            <Link href="#services" onClick={(e) => handleSmoothScroll(e, 'services')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-2xl font-semibold">
+            <Link href="#services" onClick={(e) => handleSmoothScroll(e, 'services')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-xl font-semibold py-2">
               Services
             </Link>
-            <Link href="#gallery" onClick={(e) => handleSmoothScroll(e, 'gallery')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-2xl font-semibold">
+            <Link href="#gallery" onClick={(e) => handleSmoothScroll(e, 'gallery')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-xl font-semibold py-2">
               Gallery
             </Link>
-            <Link href="#about" onClick={(e) => handleSmoothScroll(e, 'about')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-2xl font-semibold">
+            <Link href="#about" onClick={(e) => handleSmoothScroll(e, 'about')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-xl font-semibold py-2">
               About
             </Link>
-            <Link href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-2xl font-semibold">
+            <Link href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="text-white hover:text-yellow-400 transition-colors cursor-pointer text-xl font-semibold py-2">
               Contact
             </Link>
-            <button onClick={() => { handleBookingClick(); closeMobileMenu(); }} className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold text-lg hover:from-yellow-500 hover:to-yellow-700 transition-all transform hover:scale-105 whitespace-nowrap cursor-pointer mt-4">
+            <button onClick={() => { handleBookingClick(); closeMobileMenu(); }} className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold text-lg hover:from-yellow-500 hover:to-yellow-700 transition-all transform hover:scale-105 whitespace-nowrap cursor-pointer mt-6">
               Book Now
             </button>
           </div>
